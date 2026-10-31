@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>测测你是哪种骚比</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color:#f1eaf5;
+  background:#0c0a12;
+  background-image:
+    radial-gradient(900px 500px at 10% -10%,rgba(190,40,110,.25),transparent 60%),
+    radial-gradient(800px 500px at 100% 110%,rgba(90,60,200,.22),transparent 60%);
+  background-attachment:fixed;
+  min-height:100vh;
+  padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+  display:flex;justify-content:center;
+}
+#app{width:100%;max-width:520px;margin:auto 0}
+.card{
+  background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:24px;padding:26px 22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(8px);
+  animation:fade .45s ease;
+}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hidden{display:none!important}
+.badge{display:inline-block;font-size:12px;letter-spacing:2px;color:#ff8ac0;border:1px solid rgba(255,138,192,.4);padding:4px 12px;border-radius:99px;margin-bottom:16px}
+h1{font-size:34px;line-height:1.2;margin:0 0 12px;background:linear-gradient(90deg,#ff7ab8,#ffb36b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#b9aec6;line-height:1.7;font-size:15px;margin:0 0 20px}
+.types{display:flex;gap:8px;margin:0 0 24px;flex-wrap:wrap}
+.types span{font-size:13px;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.07);color:#e6d9f0}
+.btn{
+  display:block;width:100%;border:none;cursor:pointer;
+  font-size:16px;font-weight:600;color:#fff;padding:15px 18px;border-radius:99px;
+  background:linear-gradient(90deg,#e8408f,#ff7a59);
+  box-shadow:0 8px 24px rgba(232,64,143,.35);
+  transition:transform .15s,box-shadow .15s;font-family:inherit;
+}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:rgba(255,255,255,.08);box-shadow:none;color:#e9ddf2;margin-top:12px}
+.tip{font-size:12px;color:#7f7490;text-align:center;margin-top:16px;line-height:1.6}
+.progress-wrap{margin-bottom:20px}
+.progress-info{display:flex;justify-content:space-between;font-size:13px;color:#b9aec6;margin-bottom:8px}
+.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#e8408f,#ffb36b);transition:width .35s ease}
+.q{font-size:20px;line-height:1.55;font-weight:700;margin:0 0 20px}
+.opt{
+  display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);
+  color:#f1eaf5;border-radius:16px;padding:14px;margin-bottom:10px;
+  font-size:15px;line-height:1.6;cursor:pointer;font-family:inherit;
+  transition:background .15s,border-color .15s,transform .1s;
+}
+.opt:active{transform:scale(.98)}
+.opt.sel{background:rgba(232,64,143,.22);border-color:#ff7ab8}
+@media(hover:hover){.opt:hover{background:rgba(255,255,255,.1)}}
+.opt b{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:13px;color:#ff9ccb}
+.back{background:none;border:none;color:#9a8fab;font-size:13px;margin-top:6px;cursor:pointer;padding:8px 0;font-family:inherit}
+.r-name{font-size:44px;font-weight:800;margin:4px 0 2px;background:linear-gradient(90deg,#ff7ab8,#ffb36b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.r-persona{color:#b9aec6;font-size:14px;margin-bottom:14px}
+.r-tag{font-size:18px;line-height:1.5;font-weight:700;padding:14px 16px;border-radius:16px;background:rgba(232,64,143,.14);border:1px solid rgba(255,122,184,.3);margin-bottom:16px}
+.tie{background:rgba(255,179,107,.14);border:1px solid rgba(255,179,107,.4);color:#ffd2a1;padding:10px 14px;border-radius:14px;font-size:14px;margin-bottom:14px}
+.kw{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.kw span{font-size:13px;padding:6px 12px;border-radius:99px;background:linear-gradient(90deg,rgba(232,64,143,.3),rgba(255,122,89,.3));color:#ffe1ef}
+.sec{margin-top:22px}
+.sec h3{font-size:15px;margin:0 0 10px;color:#ff9ccb;letter-spacing:1px}
+.sec p{font-size:15px;line-height:1.85;margin:0 0 10px;color:#e6dcef}
+.pair{background:rgba(255,255,255,.05);border-radius:16px;padding:14px;margin-bottom:10px}
+.pair h4{margin:0 0 6px;font-size:15px;color:#ffb36b}
+.pair p{margin:0;font-size:14px;line-height:1.8;color:#ddd1e8}
+.scores{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.sc{display:flex;align-items:center;gap:10px;font-size:13px;color:#b9aec6}
+.sc em{font-style:normal;width:52px;flex:none}
+.sc .bar{flex:1;height:6px}
+.sc span{width:28px;text-align:right;flex:none}
+@media(max-width:380px){h1{font-size:29px}.q{font-size:18px}.r-name{font-size:38px}.card{padding:22px 16px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <section id="cover" class="card">
+    <div class="badge">18+ 成年人专属 · 纯属娱乐</div>
+    <h1>测测你是哪种骚比</h1>
+    <p class="sub">十八道下流小问题，三种骚法，总有一款适合你。别装，裤子都脱一半了，诚实点作答。</p>
+    <div class="types"><span>🥱 27型</span><span>🐶 栗子型</span><span>📦 盒子型</span></div>
+    <button class="btn" id="startBtn">开始测试</button>
+    <div class="tip">所有内容仅为成年人之间的玩笑，请理性娱乐。<br>数据不上传，全程只在你手机里发骚。</div>
+  </section>
+
+  <section id="quiz" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-info"><span id="pText">第 1 / 18 题</span><span id="pPct">0%</span></div>
+      <div class="bar"><i id="pBar"></i></div>
+    </div>
+    <h2 class="q" id="qText"></h2>
+    <div id="opts"></div>
+    <button class="back" id="backBtn">← 上一题</button>
+  </section>
+
+  <section id="result" class="card hidden"></section>
+</div>
+
+<script>
+(function(){
+var T={a:"27型",b:"栗子型",c:"盒子型"};
+
+/* 每题:四个选项,分别对应 a / b / c / 混合(两种类型各1分) */
+var Q=[
+{q:"凌晨一点,你下面有点躁动,发出去的第一条消息是?",o:[
+ ["a","睡了没。没睡的话……也行吧。"],
+ ["b","宝宝我好想你,想得都湿透/硬透了,能来抱抱我吗🥺"],
+ ["c","二十分钟,洗干净,过来。别让我说第二遍。"],
+ ["ab","发『在吗』,秒撤回,再发『没事』,然后失眠到天亮。"]]},
+{q:"对象回消息慢了,你吃醋的方式是?",o:[
+ ["b","连发十七条,外加三条哭唧唧的语音:『你是不是不要我了』"],
+ ["a","叹口气,心想年纪大了不争了,然后默默刷了三小时手机。"],
+ ["c","直接上门:『手机拿来,我看看你在跟哪个骚货聊。』"],
+ ["bc","嘴上说没事,下一秒在对方朋友圈点赞一整排,刷存在感。"]]},
+{q:"想被操/想操人的时候,你的眼神在说什么?",o:[
+ ["c","『你,现在,马上。』眼神已经把你扒光了。"],
+ ["a","眼皮有点沉,但视线在你腰上停了两秒。"],
+ ["b","湿漉漉地盯着你,尾巴(如果有)已经摇起来了。"],
+ ["ac","装作看手机,实际余光把你全身扫了三遍。"]]},
+{q:"被咬、被掐、被拍屁股,你的反应是?",o:[
+ ["b","『嗯……再来一下好不好?』疼也是你给的,开心。"],
+ ["c","可以,但只有我能对你这样,反过来你试试。"],
+ ["a","轻点轻点,明天还要上班,腰不是我的腰了。"],
+ ["ab","嘴上喊疼,身体很诚实,事后还要对方揉揉。"]]},
+{q:"对方对你下命令:『跪好,别动。』你会?",o:[
+ ["b","秒跪。眼睛亮晶晶:『然后呢?我乖不乖?』"],
+ ["c","挑眉:『你搞反了吧?』然后把人按回去。"],
+ ["a","『行,你说了算,我躺着就好。』能躺绝不坐。"],
+ ["bc","看心情,今天我想听话,明天换我骑你头上。"]]},
+{q:"『被使用』这件事,你怎么看?",o:[
+ ["b","被需要就是最大的快乐,用我吧,用坏也行。"],
+ ["c","使用别人才是正解,我是用的那个,谢谢。"],
+ ["a","可以用,但请自助,我这台旧机器要省电模式。"],
+ ["ac","互相使用,各取所需,爽完拔屌/起身无情。"]]},
+{q:"完事之后,你是什么状态?",o:[
+ ["b","八爪鱼附体,抱着不撒手,还要亲亲和说情话。"],
+ ["a","秒睡。叫都叫不醒,梦里还在加班。"],
+ ["c","擦干净,喝口水,点评一下刚才的表现,顺便要求下次升级。"],
+ ["ab","先黏三分钟,然后呼噜声响起来。"]]},
+{q:"你日常聊天的骚度大概是?",o:[
+ ["c","三句不离下半身,荤话随时开麦,不分场合。"],
+ ["a","冷不丁一句老司机冷笑话,全场沉默,只有你自己笑。"],
+ ["b","说话软软的,撒娇一句『想要抱』,能让人起反应。"],
+ ["bc","在熟人面前口无遮拦,在外人面前乖得像个人。"]]},
+{q:"在床上,你更像哪一种?",o:[
+ ["c","主导者。节奏我定,姿势我选,你只管叫。"],
+ ["b","服务型选手。你爽了我才爽,舔、揉、含,全套伺候。"],
+ ["a","佛系躺平型。你动我享受,偶尔哼一声证明活着。"],
+ ["ab","『你来吧,我配合你。』但中途会偷偷开始打哈欠。"]]},
+{q:"前戏你最想要多长?",o:[
+ ["c","三分钟以内,谁有空陪你磨蹭,进正题。"],
+ ["b","越长越好,亲一亲、抱一抱、摸一摸,我可以被撩一整晚。"],
+ ["a","够热身就行,别太折腾,我膝盖不太行。"],
+ ["bc","看谁先忍不住,谁忍不住谁先脱。"]]},
+{q:"别人送你一件情趣小玩意儿,你会?",o:[
+ ["c","拆了,当晚就用,而且是对别人用。"],
+ ["b","『你想用在我身上吗?好……我听你的。』"],
+ ["a","研究说明书,研究完困了,下次一定。"],
+ ["ac","偷偷收好,放在床头柜最里面,假装没有。"]]},
+{q:"对方说:『今天不想做。』你的反应?",o:[
+ ["b","『好呀,那我抱着你睡就好。』但手可能不自觉往下探。"],
+ ["c","『为什么?我哪里让你不满意?』然后一路哄到她/他想为止。"],
+ ["a","『行,正好我也累了。』然后立刻翻身关灯。"],
+ ["bc","委屈巴巴地看着对方,同时在腿上蹭来蹭去,暗示拉满。"]]},
+{q:"朋友聚会上有人开黄腔,你?",o:[
+ ["c","接得最快最下流,把全场带上高速。"],
+ ["a","慢悠悠补一刀,直接把话题带进老年养生。"],
+ ["b","脸红红地笑,但耳朵竖得最直,偷偷记下来回去试。"],
+ ["ac","笑而不语,低头吃菜,心里已经开了五辆车。"]]},
+{q:"理想的约会结尾是?",o:[
+ ["a","回家,洗澡,盖被子,然后你想做就做,我不动。"],
+ ["b","在门口亲到腿软,然后被抱进屋里。"],
+ ["c","酒店电梯里就开始撕衣服,监控随便拍。"],
+ ["bc","你送我回家,然后我『不小心』把你拉进来了。"]]},
+{q:"被人夸『你好会』,你的第一反应?",o:[
+ ["c","『废话,我是天才。下次让你更爽。』"],
+ ["b","害羞又开心:『真的吗?那我再多努力一点!』"],
+ ["a","『哦,年纪大了经验多一点而已。』喝口热水。"],
+ ["ab","嘴上谦虚,尾巴(或者腰)已经偷偷翘起来了。"]]},
+{q:"你的叫床风格最像?",o:[
+ ["b","软软糯糯,一声一个『主人』『老公』,喊得人腿软。"],
+ ["c","命令式:『再快点』『对,就是那里』,指挥现场。"],
+ ["a","压着嗓子哼两声,偶尔来一句『嗯……可以』。"],
+ ["ac","平时不吭声,被逼到极限才爆一句脏话。"]]},
+{q:"如果床上只能有一条规矩,你选哪条?",o:[
+ ["c","只许我说停,你说的不算。"],
+ ["b","要对我温柔一点,至少完事以后要抱抱。"],
+ ["a","不许折腾我,不许太久,不许半夜叫醒我。"],
+ ["ab","随便,你开心就好,但要给我留个枕头。"]]},
+{q:"朋友们会怎么形容你的『骚』?",o:[
+ ["a","闷骚老油条,平时不说话,一开口全是经验。"],
+ ["b","又骚又乖,一撒娇谁都顶不住,想欺负又想宠。"],
+ ["c","明骚,嚣张又下流,走到哪里都带着荷尔蒙。"],
+ ["ac","看起来很冷淡,一聊开比谁都放得开。"]]}
+];
+
+var R={
+a:{
+ name:"27型",persona:"疲惫老登型",
+ tag:"白天是社畜,晚上是老司机,骚是骚,但腰真的不太行。",
+ kw:["闷骚老油条","能躺不坐","省电模式"],
+ desc:[
+  "你是那种看起来对什么都提不起劲的人,眼神疲惫,语气平淡,仿佛早已看破红尘。但一提到下三路,你的经验值又高得吓人,只是平时懒得显摆。你的骚是慢热的、藏在冷笑话和意味深长的停顿里的,等别人反应过来,你已经把话说完,继续喝你的枸杞茶。",
+  "在床上,你信奉『效率』和『节能』。能躺着绝不坐着,能少动就少动,最好对方自己上手,你只负责享受和点评。偶尔来一发爆发式输出,事后立刻进入昏睡状态,叫你名字都只会得到一声『嗯……』。",
+  "你不是没欲望,只是欲望常常被加班、腰椎和睡眠不足压得半死。真正撩到你的人,往往是那个愿意体谅你、又懂得在你耳边说两句坏话的人。你一旦被点燃,别人才发现老登也是有点东西的。"],
+ tips:[
+  "约会别安排太满,留足时间给洗澡、热身和躺平。灯光调暗点,音乐放轻点,你的状态自然会上来。",
+  "玩法上推荐『你来动我来看』,比如让对方主动骑乘、按摩前戏、慢节奏撩拨,你只负责在关键时刻发力。",
+  "别在凌晨一点后搞事,体力已经透支。周五晚上、周末下午是你的黄金时段,先睡个午觉再开战。",
+  "事后给你留一杯温水和一条毯子,比任何情话都管用。"],
+ pair:{
+  b:"27型遇上栗子型:你躺平享受,他/她疯狂服务,简直是供需完美对接。栗子负责把你舔得精神抖擞,你负责偶尔揉揉他的脑袋说『乖』。唯一的隐患是,你会被黏得有点累,但又舍不得推开,因为那个温顺的小骚货真的太会了。",
+  c:"27型遇上盒子型:对方强势地要骑到你身上,你懒洋洋地说『你来吧』,结果被操得连夜思考人生。盒子的急色和霸道把你从疲惫里硬拽出来,你的老练又偶尔让他/她腿软。一个想要立刻,一个想要慢慢来,磨合好了是神仙打架。"}
+},
+b:{
+ name:"栗子型",persona:"粘人小狗服务型",
+ tag:"摇着尾巴跪好了,请随便使用我,用完记得摸摸头。",
+ kw:["黏人撒娇","服务拉满","求抱求亲"],
+ desc:[
+  "你是那种一见喜欢的人就想贴上去的小狗,说话软软的,眼神湿漉漉,一句『想要你』能把对方的理智撕成碎片。你的骚是毫无防备的、主动献上的,有点天真,有点贪吃,一边害羞一边把自己洗好送上门。",
+  "床上的你以对方为中心,舔、舔、再舔,恨不得把每一寸都伺候到位。你对被控制、被命令、被轻轻拍两下屁股毫无抵触,甚至有点上瘾。对你而言,『你好乖』比任何高潮都更让你腿软。",
+  "事后你绝对是黏人精,抱着不放,亲亲蹭蹭,还要听一句『你真棒』才肯睡。你的弱点是容易患得患失,对方回消息慢一点就开始脑补各种大戏。你要的其实很简单:被需要、被确认、被抱紧。"],
+ tips:[
+  "给你明确的指令和稳定的回应,你会表现得超级棒。比如『跪好』『张嘴』『等我允许才能动』,你会乖到冒泡。",
+  "玩法推荐轻度束缚、命令服从、被夸奖奖励、长时间前戏,让你在温柔和羞耻之间来回摇摆。",
+  "事后必须有抱抱、亲亲、夸夸环节,没有的话你会委屈三天,并在深夜发一条『你是不是玩腻我了』。",
+  "别在对方情绪不好时硬凑过去求欢,先递水,再抱抱,等对方松口再摇尾巴。"],
+ pair:{
+  a:"栗子型遇上27型:你像只热情的小狗,扑向一位懒洋洋的老干部,他躺着你就开始忙活。你的服务让他重获青春,他一句『嗯,不错』能让你高兴一整周。缺点是他经常睡着,留下你一脸『我还没到呢』的无辜表情。",
+  c:"栗子型遇上盒子型:简直是狼进羊圈。盒子一个眼神你就跪了,他/她说什么你都点头,被使用得又爽又委屈。这对组合火花最烈,床单永远洗不完,但记得设安全词,别让『好乖』变成『被榨干』。"}
+},
+c:{
+ name:"盒子型",persona:"唯我独尊急色型",
+ tag:"我想要的现在就要,你的意见我会考虑,考虑完还是我要。",
+ kw:["急色霸道","占有欲强","主导狂"],
+ desc:[
+  "你是整场游戏的主角,欲望来了谁都拦不住。看对眼就上手,嘴里不带一点客气,荤话张口就来,命令式的语气仿佛天生就该被服从。你的骚是嚣张的、外放的、带着不容拒绝的占有欲。",
+  "在床上你是那个定节奏、选姿势、决定什么时候结束的人。你对前戏没耐心,但对『把对方弄到失控』极有耐心。吃醋时你不会哭,你会直接宣示主权:『你是我的,别人看一眼都不行。』",
+  "你的软肋是不太会处理拒绝和失控,偶尔会因为太急而忽略对方感受。但只要有人能在你面前稳住阵脚、不被你吓跑,你会意外地护短、护食、护到底。你不是坏,只是饿得比较快。"],
+ tips:[
+  "你需要的是一个能接住你强势的人。事先说清楚边界和安全词,你才能放心放肆。",
+  "玩法推荐角色扮演、命令式调教、限时挑战(比如『十分钟内让我满意』)、掌控节奏的各种小游戏。",
+  "试着放慢前戏一点点,延迟满足会让你的主导感更爽,对方也会更配合。",
+  "对方说『不』的时候,请当场停下,不要再追问。这是你的帅气底线,也是你能长久拥有的原因。"],
+ pair:{
+  a:"盒子型遇上27型:你像一辆猛冲的跑车撞上一座老山,一个急一个慢,你越急他越稳。他的老练会让你第一次感觉到被反控,也许你嘴上骂着『老登』,身体却软得一塌糊涂。磨合成功后,你们是最耐操的一对。",
+  b:"盒子型遇上栗子型:一个要使用,一个想被使用,天造地设,自带滤镜。你指哪儿他/她舔哪儿,你说什么他/她都说『好』。要小心的是别把对方当玩具,事后记得抱抱,不然小狗会在夜里偷偷哭湿枕头。"}
+}
+};
+
+var $=function(id){return document.getElementById(id)};
+var cover=$("cover"),quiz=$("quiz"),result=$("result");
+var idx=0,answers=[],order=[];
+
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+function show(el){[cover,quiz,result].forEach(function(e){e.classList.add("hidden")});el.classList.remove("hidden");window.scrollTo(0,0)}
+
+function start(){
+  idx=0;answers=[];
+  order=Q.map(function(q){return shuffle([0,1,2,3])});
+  show(quiz);render();
+}
+
+function render(){
+  var q=Q[idx];
+  $("qText").textContent=(idx+1)+". "+q.q;
+  $("pText").textContent="第 "+(idx+1)+" / "+Q.length+" 题";
+  var pct=Math.round(idx/Q.length*100);
+  $("pPct").textContent=pct+"%";
+  $("pBar").style.width=pct+"%";
+  $("backBtn").style.visibility=idx===0?"hidden":"visible";
+  var box=$("opts");box.innerHTML="";
+  var letters=["A","B","C","D"];
+  order[idx].forEach(function(oi,pos){
+    var b=document.createElement("button");
+    b.className="opt"+(answers[idx]===oi?" sel":"");
+    var l=document.createElement("b");l.textContent=letters[pos];
+    var s=document.createElement("span");s.textContent=q.o[oi][1];
+    b.appendChild(l);b.appendChild(s);
+    b.addEventListener("click",function(){choose(oi,b)});
+    box.appendChild(b);
+  });
+}
+
+var locked=false;
+function choose(oi,btn){
+  if(locked)return;locked=true;
+  answers[idx]=oi;btn.classList.add("sel");
+  setTimeout(function(){
+    locked=false;
+    if(idx<Q.length-1){idx++;render()}else{finish()}
+  },220);
+}
+
+function finish(){
+  $("pBar").style.width="100%";
+  var sc={a:0,b:0,c:0};
+  answers.forEach(function(oi,i){
+    var k=Q[i].o[oi][0];
+    if(k.length===1){sc[k]+=2}else{sc[k[0]]+=1;sc[k[1]]+=1}
+  });
+  var max=Math.max(sc.a,sc.b,sc.c);
+  var top=["a","b","c"].filter(function(k){return sc[k]===max});
+  var tie=top.length>1;
+  var win=top[Math.floor(Math.random()*top.length)];
+  showResult(win,sc,tie);
+}
+
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+
+function showResult(k,sc,tie){
+  var r=R[k];result.innerHTML="";
+  result.appendChild(el("div","badge","你的测试结果"));
+  if(tie)result.appendChild(el("div","tie","你们难分伯仲,今晚可以一起"));
+  result.appendChild(el("div","r-name",r.name));
+  result.appendChild(el("div","r-persona","对应性格:"+r.persona));
+  result.appendChild(el("div","r-tag",r.tag));
+  var kw=el("div","kw");r.kw.forEach(function(w){kw.appendChild(el("span","","#"+w))});
+  result.appendChild(kw);
+
+  var s1=el("div","sec");s1.appendChild(el("h3","","▍性格详解"));
+  r.desc.forEach(function(p){s1.appendChild(el("p","",p))});
+  result.appendChild(s1);
+
+  var s2=el("div","sec");s2.appendChild(el("h3","","▍相处 / 玩法建议"));
+  r.tips.forEach(function(p,i){s2.appendChild(el("p","",(i+1)+". "+p))});
+  result.appendChild(s2);
+
+  var s3=el("div","sec");s3.appendChild(el("h3","","▍配对化学反应"));
+  Object.keys(r.pair).forEach(function(o){
+    var d=el("div","pair");
+    d.appendChild(el("h4","",r.name+" × "+T[o]));
+    d.appendChild(el("p","",r.pair[o]));
+    s3.appendChild(d);
+  });
+  result.appendChild(s3);
+
+  var s4=el("div","sec");s4.appendChild(el("h3","","▍你的骚度分布"));
+  var total=sc.a+sc.b+sc.c||1;
+  var box=el("div","scores");
+  ["a","b","c"].forEach(function(x){
+    var row=el("div","sc");row.appendChild(el("em","",T[x]));
+    var bar=el("div","bar");var i=document.createElement("i");
+    i.style.width=Math.round(sc[x]/total*100)+"%";bar.appendChild(i);row.appendChild(bar);
+    row.appendChild(el("span","",sc[x]+"分"));box.appendChild(row);
+  });
+  s4.appendChild(box);result.appendChild(s4);
+
+  var again=el("button","btn","再测一次");again.style.marginTop="26px";
+  again.addEventListener("click",function(){show(cover)});
+  result.appendChild(again);
+  result.appendChild(el("div","tip","仅供娱乐,请在双方自愿、安全的前提下玩耍。"));
+  show(result);
+}
+
+$("startBtn").addEventListener("click",start);
+$("backBtn").addEventListener("click",function(){if(idx>0&&!locked){idx--;render()}});
+})();
+</script>
+</body>
+</html>
